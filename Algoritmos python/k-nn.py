@@ -1,11 +1,13 @@
 import os
+from typing import Callable
 
 import numpy as np
+import numpy.typing as npt
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
 
-def calcula_distancias(u: np.ndarray, v: np.ndarray) -> np.ndarray:
+def calcula_distancias(u: npt.ArrayLike, v: npt.ArrayLike) -> npt.ArrayLike:
     assert isinstance(
         v, np.ndarray
     ), f'V deve ser um array numpy, e não {type(v)}'
@@ -18,7 +20,7 @@ def calcula_distancias(u: np.ndarray, v: np.ndarray) -> np.ndarray:
     return np.apply_along_axis(np.linalg.norm, 1, u - v)
 
 
-def knn(k: int, X_treino: np.ndarray, y_treino: np.ndarray):
+def knn(k: int, X_treino: npt.ArrayLike, y_treino: npt.ArrayLike) -> Callable:
     def dentro(teste: np.ndarray) -> list:
         distancias = calcula_distancias(X_treino, teste)
         idx_menores = distancias.argsort()[:k]
