@@ -28,8 +28,35 @@ Tabela_v_1_f tabela_v_1_f_ad(Tabela_v_1_f tabela, Linha_v_1_f linha);
 void procura_v_1_f(Tabela_v_1_f tabela, int quantidade, int indices[quantidade],
                    float resultado[quantidade]);
 void print_tabela_v_1_f(Tabela_v_1_f tabela);
-
 void n_menores(int n, int buff[n], Tabela_v_1_f tabela);
+
+// ------------------------ Tabelas de 3 elementos ------------------------
+typedef struct V3f {
+    float x1;
+    float x2;
+    float x3;
+} V3f;
+typedef struct Linha_v_3_f {
+    V3f v;
+    int indice;
+} Linha_v_3_f;
+typedef struct Tabela_v_3_f {
+    Linha_v_3_f* linhas;
+    int tamanho;
+    int tamanho_maximo;
+} Tabela_v_3_f;
+
+V3f v3f(float x1, float x2, float x3);
+V3f v_3_f_ad(V3f x, V3f y);
+
+Linha_v_3_f linha_v_3_f(float x1, float x2, float x3, int indice);
+
+Tabela_v_3_f tabela_v_3_f(int tamanho_maximo);
+Tabela_v_3_f tabela_v_3_f_ad(Tabela_v_3_f tabela, Linha_v_3_f linha);
+
+int v_3_f_maior(V3f v);
+
+void print_tabela_v_3_f(Tabela_v_3_f tabela);
 
 // ------------------------ Tabelas de 4 elementos ------------------------
 typedef struct V4f {
