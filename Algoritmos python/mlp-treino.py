@@ -1,4 +1,5 @@
 from pathlib import Path
+import shutil
 
 import numpy as np
 import torch
@@ -47,12 +48,29 @@ class Rede(nn.Module):
     def __init__(self):
         super(Rede, self).__init__()
 
-        self.l1 = nn.Linear(4, 3, dtype=torch.float64)
-        self.l2 = nn.Linear(3, 3, dtype=torch.float64)
+        self.l1 = nn.Linear(4, 8, dtype=torch.float64)
+        self.l2 = nn.Linear(8, 64, dtype=torch.float64)
+        self.l3 = nn.Linear(64, 512, dtype=torch.float64)
+        self.l4 = nn.Linear(512, 1024, dtype=torch.float64)
+        self.l5 = nn.Linear(1024, 1024, dtype=torch.float64)
+        self.l6 = nn.Linear(1024, 512, dtype=torch.float64)
+        self.l7 = nn.Linear(512, 64, dtype=torch.float64)
+        self.l8 = nn.Linear(64, 8, dtype=torch.float64)
+        self.l9 = nn.Linear(8, 4, dtype=torch.float64)
+        self.l10 = nn.Linear(4, 3, dtype=torch.float64)
+        
 
     def forward(self, x):
         x = F.sigmoid(self.l1(x))
-        logitos = F.sigmoid(self.l2(x))
+        x = F.sigmoid(self.l2(x))
+        x = F.sigmoid(self.l3(x))
+        x = F.sigmoid(self.l4(x))
+        x = F.sigmoid(self.l5(x))
+        x = F.sigmoid(self.l6(x))
+        x = F.sigmoid(self.l7(x))
+        x = F.sigmoid(self.l8(x))
+        x = F.sigmoid(self.l9(x))
+        logitos = F.sigmoid(self.l10(x))
         return logitos
 
 
@@ -90,7 +108,6 @@ def teste(dataloader, modelo, fn_erro):
 
             # Calcula erro
             pred = modelo(X)
-            print(pred)
             erro_teste += fn_erro(pred, y).item()
             corretos += (pred.argmax(1) == y).type(torch.float).sum().item()
 
@@ -121,9 +138,9 @@ if __name__ == '__main__':
 
     modelo = Rede().to(dispositivo)
     fn_erro = nn.CrossEntropyLoss()
-    otimizador = torch.optim.SGD(modelo.parameters(), lr=1e-1)
+    otimizador = torch.optim.SGD(modelo.parameters(), lr=.1)
 
-    epocas = 100
+    epocas = 500
 
     for t in range(epocas):
         print(f'Época: {t+1}\n' + '-' * 15)
@@ -133,7 +150,8 @@ if __name__ == '__main__':
     print('Finalizado!')
 
     dir_modelo = Path('modelo')
-    dir_modelo.mkdir(exist_ok=True)
+    shutil.rmtree(dir_modelo)
+    dir_modelo.mkdir()
     for nome, parametro in modelo.named_parameters():
         pasta, nome = nome.split('.')
         dir_camada = dir_modelo / pasta

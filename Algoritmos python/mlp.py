@@ -4,6 +4,8 @@ from typing import Callable
 import numpy as np
 import numpy.typing as npt
 
+from time import time
+
 
 class Ativacoes:
     def sigmoide(x):
@@ -124,15 +126,17 @@ if __name__ == '__main__':
     # Carrega modelo treinado
     dir_modelo = Path('modelo')
     modelo = MLP()
-    for pasta in dir_modelo.glob('*'):
+    pastas = list(dir_modelo.glob('*'))
+    pastas.sort(key=lambda i: int(str(i).strip('modelo/l')))
+    for pasta in pastas:
         print(pasta, end=':\n')
         vieses = np.loadtxt(pasta / 'bias.txt')
         pesos = np.loadtxt(pasta / 'weight.txt')
         neuronios = [
             Neuronio(peso, vies) for (peso, vies) in zip(pesos, vieses)
         ]
-        for neuronio in neuronios:
-            print(neuronio)
+        #for neuronio in neuronios:
+        #    print(neuronio)
 
         camada = Camada(neuronios)
         print(camada, end='\n\n')
@@ -141,6 +145,9 @@ if __name__ == '__main__':
 
     print(modelo)
 
+    inicio = time()
+    acc = (modelo.processa(X_teste).argmax(1) == y_teste.argmax(1)).mean()
+    print(f'{1000 * (time() - inicio)}ms')
     print(
-        f'Acurácia: {(modelo.processa(X_teste).argmax(1) == y_teste.argmax(1)).mean() * 100:>0.1f}%'
+        f'Acurácia: { acc * 100:>0.1f}%'
     )
