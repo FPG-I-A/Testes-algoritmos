@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 from typing import Callable
 
 import numpy as np
@@ -33,34 +33,17 @@ def knn(k: int, X_treino: npt.ArrayLike, y_treino: npt.ArrayLike) -> Callable:
     return dentro
 
 
-dados = np.loadtxt(
-    os.path.join('Dados', 'iris.csv'), delimiter=',', usecols=[0, 1, 2, 3]
-)
-
-# Ajusta dados de teste
-y = pd.read_csv(
-    os.path.join('Dados', 'iris.csv'),
-    sep=',',
-    usecols=[4],
-    header=None,
-    names=['Nome'],
-)
-y.loc[:, 'setosa'] = 0
-y.loc[:, 'virginica'] = 0
-y.loc[:, 'versicolor'] = 0
-y.loc[y['Nome'] == 'Iris-setosa', 'setosa'] = 1
-y.loc[y['Nome'] == 'Iris-virginica', 'virginica'] = 1
-y.loc[y['Nome'] == 'Iris-versicolor', 'versicolor'] = 1
-del y['Nome']
-y = np.array(y)
-
-# Separa conjunto de treino e teste e calcula resultados
-X_treino, X_teste, y_treino, y_teste = train_test_split(
-    dados, y, test_size=0.33, random_state=42
-)
+dir = Path('Dados')
+X_treino = np.loadtxt(dir / 'X_treino.csv')
+X_teste = np.loadtxt(dir / 'X_teste.csv')
+y_treino = np.loadtxt(dir / 'y_treino.csv')
+y_teste = np.loadtxt(dir / 'y_teste.csv')
 inferencia = knn(11, X_treino, y_treino)
 resultado = np.apply_along_axis(inferencia, 1, X_teste)
 
-# Encontra o erro
-erro = resultado - y_teste
-print(erro)
+# Encontra acurácia
+acertos = resultado == y_teste
+acertos = acertos.all(axis=1)
+print(
+    f'Acurácia: {acertos.sum()} / {y_teste.shape[0]} = {acertos.mean() * 100}%'
+)
