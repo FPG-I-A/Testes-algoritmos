@@ -52,15 +52,64 @@ float *processa_camada(Camada c, float entradas[c.entradas]){
     return resultado;
 }
 void printa_camada(Camada c, bool pesos){
-    printf("Camada com %d neurônios de %d entradas.", c.saidas, c.entradas);
+    printf("Camada com %d neurônios de %d entradas.\n", c.saidas, c.entradas);
     if (pesos){
-        printf(" Neurônios:\n");
+        printf("Neurônios:\n");
         for (int i = 0; i < c.saidas; i++){
             printf("\t");
             printa_neuronio(c.neuronios[i]);
         }
     }
-    else{
-        printf("\n");
+}
+
+// ------------------ CAMADA ------------------
+
+Rede rede(int entradas, int saidas, float pesos[saidas][entradas], float (*ativacao)(float)){
+    Camada *c = malloc(sizeof(Camada));
+    c[0] = camada(entradas, saidas, pesos, ativacao);
+    Rede r = {entradas, saidas, 1, 1, c};
+    return r;
+}
+
+Rede adiciona_camada(Rede r, int entradas, int saidas, float pesos[saidas][entradas], float (*ativacao)(float)) {
+    if (entradas != r.camadas[r.num_camadas-1].saidas) {
+        fprintf(stderr,
+                "ERRO: A camada adicionada deve ter o mesmo numero de entradas"
+                "que a ultima camada tem de saidas, porem ela possui %d entradas"
+                " e a camada anterior possui %d saidas.\n\n\n", entradas, r.camadas[r.num_camadas-1].entradas);
+        exit(1);
     }
+    Camada c = camada(entradas, saidas, pesos, ativacao);
+    if (r.max_camadas > r.num_camadas) {
+        r.camadas[r.num_camadas] = c;
+        r.num_camadas++;
+        return r;
+    }
+
+    Camada *tmp = r.camadas;
+    r.camadas = malloc(r.max_camadas * sizeof(Camada));
+    for (int i = 0; i < r.num_camadas; i++) {
+        r.camadas[i] = tmp[i];
+    }
+    free(tmp);
+    r.camadas[r.num_camadas] = c;
+    r.num_camadas++;
+    return r;
+}
+
+float *processa_rede(Rede r, float entradas[r.entradas]) {
+    // TO-DO: algoritmo de feedforward
+    // Dificuldade: tamanho do vetor deve mudar a cada camada
+}
+
+void printa_rede(Rede r, bool camadas) {
+    printf("Rede neural com %d camadas, %d entradas e %d saidas.\n", r.num_camadas, r.camadas[0].entradas, r.camadas[r.num_camadas-1].saidas);
+    if (camadas) {
+        printf("Camadas:\n");
+        for (int i = 0; i < r.num_camadas; i++) {
+            printf("\t");
+            printa_camada(r.camadas[i], false);
+        }
+    }
+
 }
