@@ -1,4 +1,4 @@
-#include "neuronio.h"
+#include "structs.h"
 #include "ativacoes.h"
 
 int main(){
@@ -10,32 +10,32 @@ int main(){
         {-.2, -.5, -.2}
     };
 
-    Neuronio c1[4];
-    for (int i = 0; i < 4; i++){
-        c1[i] = neuronio(3, pesos1[i], *relu);
-    }
+    Camada c1 = camada(3, 4, pesos1, relu);
     
 
     // Segunda camada
-    float pesos2[][2] = {
-        {-.2, .3},
-        {.3, -.2},
-        {.5, 1.4}
+    float pesos2[][4] = {
+        {-.2, .3, -.2, .3},
+        {.3, -.2, .3, -.2},
+        {.5, 1.4, .5, 1.4}
     };
 
-    Neuronio c2[3];
-    for (int i = 0; i < 3; i++){
-        c2[i] = neuronio(2, pesos2[i], *relu);
-    }
+    Camada c2 = camada(4, 3, pesos2, relu);
+
     
     printf("Primeira camada:\n");
-    for (int i = 0; i < 4; i++){
-        printa_neuronio(c1[i]);
-    }
-    printf("Segunda camada:\n");
-    for (int i = 0; i < 3; i++){
-        printa_neuronio(c2[i]);
-    }
+    printa_camada(c1, true);
+    printf("\nSegunda camada:\n");
+    printa_camada(c2, true);
+
+    float entradas[] = {1, 1, 1};
+    printf("Entradas: {%f, %f, %f}\n", entradas[0], entradas[1], entradas[2]);
+
+    float *saida_c1 = processa_camada(c1, entradas);
+    printf("Saídas c1: {%f, %f, %f, %f}\n", saida_c1[0], saida_c1[1], saida_c1[2], saida_c1[3]);
+
+    float *saida_c2 = processa_camada(c2, saida_c1);
+    printf("Saídas c1: {%f, %f, %f}\n", saida_c2[0], saida_c2[1], saida_c2[2]);
     
     return 0;
 }
