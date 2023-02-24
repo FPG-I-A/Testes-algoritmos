@@ -1,17 +1,17 @@
+from pathlib import Path
 from typing import Callable
 
 import numpy as np
 import numpy.typing as npt
 
+from time import time
+
 
 class Ativacoes:
-    def __init__(self):
-        return
+    def sigmoide(x):
+        return 1 / (1 + np.exp(-x))
 
-    def sigmoide(self, x):
-        return 1 / (1 + np.exp(x))
-
-    def relu(self, x):
+    def relu(x):
         if x.ndim == 0:
             return x if x > 0 else 0
         resultados = []
@@ -19,7 +19,7 @@ class Ativacoes:
             resultados.append(valor if valor > 0 else 0)
         return resultados
 
-    def tanh(self, x):
+    def tanh(x):
         exp = np.exp(2 * x)
         return (exp - 1) / (exp + 1)
 
@@ -38,7 +38,10 @@ class Neuronio:
         return self.entradas
 
     def __str__(self):
-        return f'Neurônio com {self.entradas} entradas'
+        string = f'Neurônio com {self.entradas} entradas'
+        string += f'\n\tPesos: {self.pesos}'
+        string += f'\n\tViés:  {self.vies}'
+        return string
 
     def processa(
         self, entradas: npt.ArrayLike, ativacao: Callable
@@ -54,7 +57,7 @@ class Neuronio:
 
 class Camada:
     def __init__(
-        self, neuronios: list, ativacao: Callable = Ativacoes().sigmoide
+        self, neuronios: list, ativacao: Callable = Ativacoes.sigmoide
     ):
         for neuronio in neuronios[1:]:
             assert (
@@ -114,34 +117,37 @@ class MLP:
         return entradas
 
 
-camadas = 7
-entradas = 4
-saidas = 2
-tamanhos = [2, 4, 8, 16, 8, 4, 2]
-print(tamanhos)
+if __name__ == '__main__':
+    # Carrega dados de teste
+    dir_dados = Path('Dados')
+    X_teste = np.loadtxt(dir_dados / 'X_teste.csv')
+    y_teste = np.loadtxt(dir_dados / 'y_teste.csv')
 
-rede = MLP([Camada([Neuronio(np.random.randn(entradas)) for _ in range(4)])])
-for camada, tamanho in enumerate(tamanhos):
-    rede.adiciona_camada(
-        Camada(
-            [
-                Neuronio(np.random.randn(rede.camadas[-1].tamanho))
-                for _ in range(tamanho)
-            ]
-        )
-    )
-
-rede.adiciona_camada(
-    Camada(
-        [
-            Neuronio(np.random.randn(rede.camadas[-1].tamanho))
-            for i in range(saidas)
+    # Carrega modelo treinado
+    dir_modelo = Path('modelo')
+    modelo = MLP()
+    pastas = list(dir_modelo.glob('*'))
+    pastas.sort(key=lambda i: int(str(i).strip('modelo/l')))
+    for pasta in pastas:
+        print(pasta, end=':\n')
+        vieses = np.loadtxt(pasta / 'bias.txt')
+        pesos = np.loadtxt(pasta / 'weight.txt')
+        neuronios = [
+            Neuronio(peso, vies) for (peso, vies) in zip(pesos, vieses)
         ]
+        #for neuronio in neuronios:
+        #    print(neuronio)
+
+        camada = Camada(neuronios)
+        print(camada, end='\n\n')
+
+        modelo.adiciona_camada(camada)
+
+    print(modelo)
+
+    inicio = time()
+    acc = (modelo.processa(X_teste).argmax(1) == y_teste.argmax(1)).mean()
+    print(f'{1000 * (time() - inicio)}ms')
+    print(
+        f'Acurácia: { acc * 100:>0.1f}%'
     )
-)
-
-for camada in rede.camadas:
-    print(camada)
-
-entradas = np.random.randn(10, entradas)
-print(rede.processa(entradas))
