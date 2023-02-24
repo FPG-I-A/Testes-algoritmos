@@ -23,6 +23,7 @@ with open(dados_crus, mode='wb') as f:
 x = np.loadtxt(dados_crus, delimiter=',', usecols=[0, 1, 2, 3])
 y = pd.read_csv(
     dados_crus,
+
     sep=',',
     usecols=[4],
     header=None,
@@ -39,7 +40,6 @@ y.loc[y['Nome'] == 'Iris-versicolor', 'versicolor'] = 1
 del y['Nome']
 y = np.array(y)
 
-
 # Separa conjunto de treino e teste e calcula resultados
 separados = train_test_split(x, y, test_size=0.33, random_state=42)
 
@@ -49,3 +49,4 @@ for nome, array in zip(
 ):
     nome += '.csv'
     np.savetxt(dir / nome, array)
+
