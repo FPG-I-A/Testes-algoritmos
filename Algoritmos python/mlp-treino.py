@@ -49,28 +49,13 @@ class Rede(nn.Module):
         super(Rede, self).__init__()
 
         self.l1 = nn.Linear(4, 8, dtype=torch.float64)
-        self.l2 = nn.Linear(8, 64, dtype=torch.float64)
-        self.l3 = nn.Linear(64, 512, dtype=torch.float64)
-        self.l4 = nn.Linear(512, 1024, dtype=torch.float64)
-        self.l5 = nn.Linear(1024, 1024, dtype=torch.float64)
-        self.l6 = nn.Linear(1024, 512, dtype=torch.float64)
-        self.l7 = nn.Linear(512, 64, dtype=torch.float64)
-        self.l8 = nn.Linear(64, 8, dtype=torch.float64)
-        self.l9 = nn.Linear(8, 4, dtype=torch.float64)
-        self.l10 = nn.Linear(4, 3, dtype=torch.float64)
-        
+        self.l2 = nn.Linear(8, 8, dtype=torch.float64)
+        self.l3 = nn.Linear(8, 3, dtype=torch.float64)
 
     def forward(self, x):
         x = F.sigmoid(self.l1(x))
         x = F.sigmoid(self.l2(x))
-        x = F.sigmoid(self.l3(x))
-        x = F.sigmoid(self.l4(x))
-        x = F.sigmoid(self.l5(x))
-        x = F.sigmoid(self.l6(x))
-        x = F.sigmoid(self.l7(x))
-        x = F.sigmoid(self.l8(x))
-        x = F.sigmoid(self.l9(x))
-        logitos = F.sigmoid(self.l10(x))
+        logitos = F.sigmoid(self.l3(x))
         return logitos
 
 
@@ -123,9 +108,9 @@ if __name__ == '__main__':
     treino_set, teste_set = Iris(
         'Dados', treino=True, target_transform=lambda x: x.argmax()
     ), Iris('Dados', treino=False, target_transform=lambda x: x.argmax())
-    treino_loader, teste_loader = DataLoader(
-        treino_set, batch_size=25
-    ), DataLoader(teste_set, batch_size=25)
+    treino_loader, teste_loader = DataLoader(treino_set, batch_size=25), DataLoader(
+        teste_set, batch_size=25
+    )
 
     # Checagem de dispositivo disponível
     dispositivo = (
@@ -138,7 +123,7 @@ if __name__ == '__main__':
 
     modelo = Rede().to(dispositivo)
     fn_erro = nn.CrossEntropyLoss()
-    otimizador = torch.optim.SGD(modelo.parameters(), lr=.1)
+    otimizador = torch.optim.SGD(modelo.parameters(), lr=0.1)
 
     epocas = 500
 
@@ -150,7 +135,8 @@ if __name__ == '__main__':
     print('Finalizado!')
 
     dir_modelo = Path('modelo')
-    shutil.rmtree(dir_modelo)
+    if dir_modelo.exists():
+        shutil.rmtree(dir_modelo)
     dir_modelo.mkdir()
     for nome, parametro in modelo.named_parameters():
         pasta, nome = nome.split('.')

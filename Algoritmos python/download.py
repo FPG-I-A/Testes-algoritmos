@@ -6,7 +6,7 @@ import requests
 from sklearn.model_selection import train_test_split
 
 # Cria pasta de dados
-dir = Path('Dados')
+dir = Path('..', 'Dados')
 dir.mkdir(exist_ok=True)
 
 
@@ -23,7 +23,6 @@ with open(dados_crus, mode='wb') as f:
 x = np.loadtxt(dados_crus, delimiter=',', usecols=[0, 1, 2, 3])
 y = pd.read_csv(
     dados_crus,
-
     sep=',',
     usecols=[4],
     header=None,
@@ -44,9 +43,6 @@ y = np.array(y)
 separados = train_test_split(x, y, test_size=0.33, random_state=42)
 
 # Salva dados de treino e de teste
-for nome, array in zip(
-    ['X_treino', 'X_teste', 'y_treino', 'y_teste'], separados
-):
+for nome, array in zip(['x_treino', 'x_teste', 'y_treino', 'y_teste'], separados):
     nome += '.csv'
-    np.savetxt(dir / nome, array)
-
+    np.savetxt(dir / nome, array, delimiter=',')

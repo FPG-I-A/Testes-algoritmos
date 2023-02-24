@@ -1,5 +1,6 @@
+.vscode
 .python-version
 poetry.lock
-Algoritmos python/Dados/
+**/Dados/
 Algoritmos python/modelo/
 
