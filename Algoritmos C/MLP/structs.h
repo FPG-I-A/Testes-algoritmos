@@ -9,12 +9,13 @@
 // ------------------------------------ NEURÔNIO ------------------------------------
 typedef struct Neuronio {
     int entradas;
+    float vies;
     float* pesos;
     float (*ativacao)(float x);
 } Neuronio;
 
 
-Neuronio neuronio(int entradas, float pesos[entradas], float (*ativacao)(float));
+Neuronio neuronio(int entradas, float vies, float pesos[entradas], float (*ativacao)(float));
 
 float processa_neuronio(Neuronio n, float entradas[n.entradas]);
 
@@ -28,7 +29,7 @@ typedef struct Camada {
     Neuronio *neuronios;
 } Camada;
 
-Camada camada(int entradas, int saidas, float pesos[saidas][entradas], float (*ativacao)(float));
+Camada camada(int entradas, int saidas, float vieses[saidas], float pesos[saidas][entradas], float (*ativacao)(float));
 
 float *processa_camada(Camada c, float entradas[c.entradas]);
 
@@ -44,8 +45,8 @@ typedef struct Rede {
     Camada *camadas;
 } Rede;
 
-Rede rede(int entradas, int saidas, float pesos[saidas][entradas], float (*ativacao)(float));
-Rede adiciona_camada(Rede r, int entradas, int saidas, float pesos[saidas][entradas], float (*ativacao)(float));
+Rede rede(int entradas, int saidas, float vieses[saidas], float pesos[saidas][entradas], float (*ativacao)(float));
+Rede adiciona_camada(Rede r, int entradas, int saidas, float vieses[saidas], float pesos[saidas][entradas], float (*ativacao)(float));
 
 float *processa_rede(Rede r, float entradas[r.entradas]);
 

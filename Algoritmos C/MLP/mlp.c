@@ -2,6 +2,7 @@
 #include "ativacoes.h"
 
 int main(){
+    
     // Primeira camada
     float pesos1[][3] = {
         {1, 1, 1},
@@ -10,7 +11,9 @@ int main(){
         {-.2, -.5, -.2}
     };
 
-    Camada c1 = camada(3, 4, pesos1, relu);
+    float vieses1[4] = {-.5, .3, .4, 1};
+
+    Camada c1 = camada(3, 4, vieses1, pesos1, relu);
     
 
     // Segunda camada
@@ -19,8 +22,9 @@ int main(){
         {.3, -.2, .3, -.2},
         {.5, 1.4, .5, 1.4}
     };
+    float vieses2[3] = {1, 1, 1};
 
-    Camada c2 = camada(4, 3, pesos2, relu);
+    Camada c2 = camada(4, 3, vieses2, pesos2, relu);
 
     
     printf("Primeira camada:\n");
@@ -38,14 +42,14 @@ int main(){
     printf("\nSaídas c2: {%f, %f, %f}\n", saida_c2[0], saida_c2[1], saida_c2[2]);
 
 
-    Rede r = rede(3, 4, pesos1, relu);
+    Rede r = rede(3, 4, vieses1, pesos1, relu);
     printf("\n");
     printa_rede(r, true);
     float * r1 = processa_rede(r, entradas);
     printf("\nSaídas c1: {%f, %f, %f, %f}\n", r1[0], r1[1], r1[2], r1[3]);
 
 
-    r = adiciona_camada(r, 4, 3, pesos2, relu);
+    r = adiciona_camada(r, 4, 3, vieses2, pesos2, relu);
     printf("\n");
     printa_rede(r, true);
     float * r2 = processa_rede(r, entradas);
