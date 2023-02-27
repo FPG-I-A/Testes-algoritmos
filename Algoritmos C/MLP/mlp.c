@@ -54,5 +54,11 @@ int main(){
     printa_rede(r, true);
     float * r2 = processa_rede(r, entradas);
     printf("\nSaídas c2: {%f, %f, %f}\n", r2[0], r2[1], r2[2]);
+
+    float entradas2[3][3] = {{1, 1, 1}, {1, 1, 1}, {0, 0, 0}};
+    float **r3 = processa_lote(r, 3, entradas2);
+    printf("\nSaídas: {%f, %f, %f}\n", r3[0][0], r3[0][1], r3[0][2]);
+    printf("\nSaídas: {%f, %f, %f}\n", r3[1][0], r3[1][1], r3[1][2]);
+    printf("\nSaídas: {%f, %f, %f}\n", r3[2][0], r3[2][1], r3[2][2]);
     return 0;
 }

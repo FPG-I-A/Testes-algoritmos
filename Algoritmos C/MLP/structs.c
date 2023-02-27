@@ -117,6 +117,13 @@ float *processa_rede(Rede r, float entradas[r.entradas]) {
     return tmp1;
 
 }
+float **processa_lote(Rede r, int quantidade, float entradas[quantidade][r.entradas]) {
+    float **resultado = malloc(quantidade * r.saidas * sizeof(float));
+    for (int i = 0; i < quantidade; i++) {
+        resultado[i] = processa_rede(r, entradas[i]);
+    }
+    return resultado;
+}
 
 void printa_rede(Rede r, bool camadas) {
     printf("Rede neural com %d camadas, %d entradas e %d saidas.\n", r.num_camadas, r.camadas[0].entradas, r.camadas[r.num_camadas-1].saidas);
@@ -129,3 +136,4 @@ void printa_rede(Rede r, bool camadas) {
     }
 
 }
+ 

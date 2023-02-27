@@ -50,6 +50,8 @@ Rede adiciona_camada(Rede r, int entradas, int saidas, float vieses[saidas], flo
 
 float *processa_rede(Rede r, float entradas[r.entradas]);
 
+float **processa_lote(Rede r, int quantidade, float entradas[quantidade][r.entradas]);
+
 void printa_rede(Rede r, bool camadas);
 
 #endif // STRUCTS_H
