@@ -1,7 +1,7 @@
 #include "structs.h"
 
 
-// ------------------ NEURÔNIO ------------------
+// ------------------------------------ NEURÔNIO ------------------------------------
 
 Neuronio neuronio(int entradas, float pesos[entradas], float (*ativacao)(float)){
     Neuronio n = {entradas, pesos, ativacao};
@@ -28,7 +28,7 @@ void printa_neuronio(Neuronio n){
     }
 }
 
-// ------------------ CAMADA ------------------
+// ------------------------------------ CAMADA ------------------------------------
 
 Camada camada(int entradas, int saidas, float pesos[saidas][entradas], float (*ativacao)(float)){
     Neuronio *n = malloc(saidas * sizeof(Neuronio));
@@ -62,7 +62,7 @@ void printa_camada(Camada c, bool pesos){
     }
 }
 
-// ------------------ CAMADA ------------------
+// ------------------------------------ REDE ------------------------------------
 
 Rede rede(int entradas, int saidas, float pesos[saidas][entradas], float (*ativacao)(float)){
     Camada *c = malloc(sizeof(Camada));
@@ -98,8 +98,23 @@ Rede adiciona_camada(Rede r, int entradas, int saidas, float pesos[saidas][entra
 }
 
 float *processa_rede(Rede r, float entradas[r.entradas]) {
-    // TO-DO: algoritmo de feedforward
-    // Dificuldade: tamanho do vetor deve mudar a cada camada
+    float *tmp1 = malloc(r.camadas[0].entradas * sizeof(float));  // tmp1: guarda as entradas da camada atual
+    float *tmp2 = malloc(r.camadas[0].saidas * sizeof(float));    // tmp2: guarda as saidas da camada atual
+
+    // Popula primeiro vetor de entradas (entradas da segunda camada)
+    tmp1 = processa_camada(r.camadas[0], entradas);
+
+    // Percorre rede camada a camada
+    for (int i = 0; i < r.num_camadas - 1; i++){
+        Camada c = r.camadas[i+1];
+        tmp2 = processa_camada(c, tmp1);
+        free(tmp1);
+        tmp1 = tmp2;                                          // tmp1 = saida da camada atual = entrada da próxima camada
+        tmp2 = malloc(r.camadas[i+1].saidas * sizeof(float)); // tmp2 = saida da próxima camada
+    }
+    free(tmp2);
+    return tmp1;
+
 }
 
 void printa_rede(Rede r, bool camadas) {

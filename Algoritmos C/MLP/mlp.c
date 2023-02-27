@@ -35,7 +35,7 @@ int main(){
     printf("\nSaídas c1: {%f, %f, %f, %f}\n", saida_c1[0], saida_c1[1], saida_c1[2], saida_c1[3]);
 
     float *saida_c2 = processa_camada(c2, saida_c1);
-    printf("\nSaídas c1: {%f, %f, %f}\n", saida_c2[0], saida_c2[1], saida_c2[2]);
+    printf("\nSaídas c2: {%f, %f, %f}\n", saida_c2[0], saida_c2[1], saida_c2[2]);
 
 
     Rede r = rede(3, 4, pesos1, relu);
@@ -43,10 +43,12 @@ int main(){
     printa_rede(r, true);
     float * r1 = processa_rede(r, entradas);
     printf("\nSaídas c1: {%f, %f, %f, %f}\n", r1[0], r1[1], r1[2], r1[3]);
+
+
     r = adiciona_camada(r, 4, 3, pesos2, relu);
     printf("\n");
     printa_rede(r, true);
     float * r2 = processa_rede(r, entradas);
-    printf("\nSaídas 21: {%f, %f, %f}\n", r2[0], r2[1], r2[2]);
+    printf("\nSaídas c2: {%f, %f, %f}\n", r2[0], r2[1], r2[2]);
     return 0;
 }

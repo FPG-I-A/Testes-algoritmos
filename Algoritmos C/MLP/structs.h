@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 
-// ------------------ NEURÔNIO ------------------
+// ------------------------------------ NEURÔNIO ------------------------------------
 typedef struct Neuronio {
     int entradas;
     float* pesos;
@@ -20,7 +20,7 @@ float processa_neuronio(Neuronio n, float entradas[n.entradas]);
 
 void printa_neuronio(Neuronio n);
 
-// ------------------ CAMADA ------------------
+// ------------------------------------ CAMADA ------------------------------------
 
 typedef struct Camada {
     int entradas;
@@ -34,7 +34,7 @@ float *processa_camada(Camada c, float entradas[c.entradas]);
 
 void printa_camada(Camada c, bool pesos);
 
-// ------------------ REDE ------------------
+// ------------------------------------ REDE ------------------------------------
 
 typedef struct Rede {
     int entradas;
