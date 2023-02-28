@@ -88,6 +88,7 @@ Rede adiciona_camada(Rede r, int entradas, int saidas, float vieses[saidas], flo
         return r;
     }
 
+    r.max_camadas *= 2;
     Camada *tmp = r.camadas;
     r.camadas = malloc(r.max_camadas * sizeof(Camada));
     for (int i = 0; i < r.num_camadas; i++) {
