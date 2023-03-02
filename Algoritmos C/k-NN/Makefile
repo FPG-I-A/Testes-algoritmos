@@ -1,15 +1,15 @@
 CC=gcc
 CFLAGS=-Wall --pedantic -pipe -lm
 
-.PHONY: all knn dataset clean
+.PHONY: all knn gera_main clean
 
-all: clean dataset knn
+all: clean gera_main knn
 
 knn:
 	$(CC) structs.c main.c -o main.o $(CFLAGS)
 
-dataset:
-	python gera_dataset.py
+gera_main:
+	python cria_main.py
 
 clean:
 	-rm *.o *.exe dataset.h
