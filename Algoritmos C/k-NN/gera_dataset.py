@@ -13,17 +13,13 @@ for variavel in variaveis:
     for tipo in tipos:
         nome_arq = variavel + '_' + tipo + '.csv'
         valores[nome_arq[:-4]] = np.loadtxt(
-            dir_dados / nome_arq, delimiter=',', skiprows=1
+            dir_dados / nome_arq, delimiter=','
         )
 
 with open('dataset.h', mode='w') as f:
     for chave, valor in valores.items():
         # Variável declaracao representa a declaração da variável
-        declaracao = ''
-        if chave.startswith('x'):
-            declaracao += 'float '
-        else:
-            declaracao += 'int '
+        declaracao = 'float '
 
         declaracao += chave + f'[][{valor.shape[1]}]' + ' = {\n'
         f.write(declaracao)
