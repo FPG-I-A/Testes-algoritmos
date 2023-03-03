@@ -4,8 +4,6 @@ from typing import Callable
 import numpy as np
 import numpy.typing as npt
 
-from time import time
-
 
 class Ativacoes:
     def sigmoide(x):
@@ -119,24 +117,23 @@ class MLP:
 
 if __name__ == '__main__':
     # Carrega dados de teste
-    dir_dados = Path('Dados')
-    X_teste = np.loadtxt(dir_dados / 'X_teste.csv')
-    y_teste = np.loadtxt(dir_dados / 'y_teste.csv')
+    dir_dados = Path('..', 'Dados')
+    X_teste = np.loadtxt(dir_dados / 'x_teste.csv', delimiter=',')
+    y_teste = np.loadtxt(dir_dados / 'y_teste.csv', delimiter=',')
 
     # Carrega modelo treinado
     dir_modelo = Path('modelo')
     modelo = MLP()
     pastas = list(dir_modelo.glob('*'))
-    pastas.sort(key=lambda i: int(str(i).strip('modelo/l')))
+    pastas.sort(
+        key=lambda i: int(str(i).strip('modelo/l'))
+    )   # sort é necessário, pois a ordem das pastas não necessariamente vem ordenada por nome
     for pasta in pastas:
-        print(pasta, end=':\n')
-        vieses = np.loadtxt(pasta / 'bias.txt')
-        pesos = np.loadtxt(pasta / 'weight.txt')
+        vieses = np.loadtxt(pasta / 'bias.txt', delimiter=',')
+        pesos = np.loadtxt(pasta / 'weight.txt', delimiter=',')
         neuronios = [
             Neuronio(peso, vies) for (peso, vies) in zip(pesos, vieses)
         ]
-        #for neuronio in neuronios:
-        #    print(neuronio)
 
         camada = Camada(neuronios)
         print(camada, end='\n\n')
@@ -145,9 +142,5 @@ if __name__ == '__main__':
 
     print(modelo)
 
-    inicio = time()
     acc = (modelo.processa(X_teste).argmax(1) == y_teste.argmax(1)).mean()
-    print(f'{1000 * (time() - inicio)}ms')
-    print(
-        f'Acurácia: { acc * 100:>0.1f}%'
-    )
+    print(f'Acurácia: { acc * 100:>0.1f}%')

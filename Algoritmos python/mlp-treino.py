@@ -1,5 +1,5 @@
-from pathlib import Path
 import shutil
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -20,11 +20,19 @@ class Iris(Dataset):
         # Lê conjunto de dados
         self.dir = Path(dir_dados)
         if treino:
-            self.x = torch.tensor(np.loadtxt(self.dir / 'x_treino.csv', delimiter=','))
-            self.y = torch.tensor(np.loadtxt(self.dir / 'y_treino.csv', delimiter=','))
+            self.x = torch.tensor(
+                np.loadtxt(self.dir / 'x_treino.csv', delimiter=',')
+            )
+            self.y = torch.tensor(
+                np.loadtxt(self.dir / 'y_treino.csv', delimiter=',')
+            )
         else:
-            self.x = torch.tensor(np.loadtxt(self.dir / 'x_teste.csv', delimiter=','))
-            self.y = torch.tensor(np.loadtxt(self.dir / 'y_teste.csv', delimiter=','))
+            self.x = torch.tensor(
+                np.loadtxt(self.dir / 'x_teste.csv', delimiter=',')
+            )
+            self.y = torch.tensor(
+                np.loadtxt(self.dir / 'y_teste.csv', delimiter=',')
+            )
 
         # Salva funções de transformação
         self.transform = transform
@@ -107,10 +115,14 @@ if __name__ == '__main__':
     # Criação dos dataloaders
     treino_set, teste_set = Iris(
         Path('..', 'Dados'), treino=True, target_transform=lambda x: x.argmax()
-    ), Iris(Path('..', 'Dados'), treino=False, target_transform=lambda x: x.argmax())
-    treino_loader, teste_loader = DataLoader(treino_set, batch_size=25), DataLoader(
-        teste_set, batch_size=25
+    ), Iris(
+        Path('..', 'Dados'),
+        treino=False,
+        target_transform=lambda x: x.argmax(),
     )
+    treino_loader, teste_loader = DataLoader(
+        treino_set, batch_size=25
+    ), DataLoader(teste_set, batch_size=25)
 
     # Checagem de dispositivo disponível
     dispositivo = (
@@ -143,4 +155,6 @@ if __name__ == '__main__':
         dir_camada = dir_modelo / pasta
         dir_camada.mkdir(exist_ok=True)
         nome += '.txt'
-        np.savetxt(dir_camada / nome, parametro.cpu().detach().numpy(), delimiter=',')
+        np.savetxt(
+            dir_camada / nome, parametro.cpu().detach().numpy(), delimiter=','
+        )

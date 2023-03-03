@@ -33,11 +33,11 @@ def knn(k: int, X_treino: npt.ArrayLike, y_treino: npt.ArrayLike) -> Callable:
     return dentro
 
 
-dir = Path('Dados')
-X_treino = np.loadtxt(dir / 'X_treino.csv')
-X_teste = np.loadtxt(dir / 'X_teste.csv')
-y_treino = np.loadtxt(dir / 'y_treino.csv')
-y_teste = np.loadtxt(dir / 'y_teste.csv')
+dir = Path('..', 'Dados')
+X_treino = np.loadtxt(dir / 'x_treino.csv', delimiter=',')
+X_teste = np.loadtxt(dir / 'x_teste.csv', delimiter=',')
+y_treino = np.loadtxt(dir / 'y_treino.csv', delimiter=',')
+y_teste = np.loadtxt(dir / 'y_teste.csv', delimiter=',')
 inferencia = knn(11, X_treino, y_treino)
 resultado = np.apply_along_axis(inferencia, 1, X_teste)
 

@@ -43,6 +43,8 @@ y = np.array(y)
 separados = train_test_split(x, y, test_size=0.33, random_state=42)
 
 # Salva dados de treino e de teste
-for nome, array in zip(['x_treino', 'x_teste', 'y_treino', 'y_teste'], separados):
+for nome, array in zip(
+    ['x_treino', 'x_teste', 'y_treino', 'y_teste'], separados
+):
     nome += '.csv'
     np.savetxt(dir / nome, array, delimiter=',')
