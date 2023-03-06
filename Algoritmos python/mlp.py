@@ -50,6 +50,7 @@ class Neuronio:
         assert entradas.T.shape[0] == len(
             self
         ), f'O número de entradas deve ser o mesmo que o número de pesos, mas são, respectivamente, {entradas.shape[1]} e {len(self)}'
+        # Operador @ em numpy é produto matricial (escalar quando são dois vetores)
         produto = self.pesos @ entradas.T + self.vies
 
         return ativacao(produto)
@@ -127,16 +128,13 @@ if __name__ == '__main__':
     dir_modelo = Path('modelo')
     modelo = MLP()
     pastas = list(dir_modelo.glob('*'))
-    pastas.sort(key=lambda i: int(str(i).strip('modelo/l')))
+    pastas.sort(key=lambda i: int(str(i).strip('modelo/l'))) # sort é necessário, pois a ordem das pastas é meio 
     for pasta in pastas:
-        print(pasta, end=':\n')
         vieses = np.loadtxt(pasta / 'bias.txt')
         pesos = np.loadtxt(pasta / 'weight.txt')
         neuronios = [
             Neuronio(peso, vies) for (peso, vies) in zip(pesos, vieses)
         ]
-        #for neuronio in neuronios:
-        #    print(neuronio)
 
         camada = Camada(neuronios)
         print(camada, end='\n\n')

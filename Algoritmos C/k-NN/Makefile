@@ -12,4 +12,4 @@ gera_main:
 	python cria_main.py
 
 clean:
-	-rm *.o *.exe dataset.h
+	-rm *.o *.exe main.c
