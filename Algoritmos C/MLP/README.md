@@ -17,8 +17,8 @@ Esse é um arquivo auxiliar, o objetivo deste script é ler o conjunto de dados 
 
 Arquivos que implementam duas funções de ativação: sigmoide e relu com definições abaixo:
 
-- sigmoide: $y = \dfrac{1}{1 + e^{-x}}$
-- relu: $y = \begin{cases}x, x>=0 \\ 0, x< 0 \end{cases}$
+- sigmoide: $ y = \dfrac{1}{1 + e^{-x}} $
+- relu: $ y = 0 if x \geq 0 else 1 $
   
 ## `structs.c` e `structs.h`
 
