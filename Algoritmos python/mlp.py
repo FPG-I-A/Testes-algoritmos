@@ -120,9 +120,9 @@ class MLP:
 
 if __name__ == '__main__':
     # Carrega dados de teste
-    dir_dados = Path('Dados')
-    X_teste = np.loadtxt(dir_dados / 'X_teste.csv')
-    y_teste = np.loadtxt(dir_dados / 'y_teste.csv')
+    dir_dados = Path('..', 'Dados')
+    X_teste = np.loadtxt(dir_dados / 'x_teste.csv', delimiter=',')
+    y_teste = np.loadtxt(dir_dados / 'y_teste.csv', delimiter=',')
 
     # Carrega modelo treinado
     dir_modelo = Path('modelo')
@@ -130,8 +130,8 @@ if __name__ == '__main__':
     pastas = list(dir_modelo.glob('*'))
     pastas.sort(key=lambda i: int(str(i).strip('modelo/l'))) # sort é necessário, pois a ordem das pastas é meio 
     for pasta in pastas:
-        vieses = np.loadtxt(pasta / 'bias.txt')
-        pesos = np.loadtxt(pasta / 'weight.txt')
+        vieses = np.loadtxt(pasta / 'bias.txt', delimiter=',')
+        pesos = np.loadtxt(pasta / 'weight.txt', delimiter=',')
         neuronios = [
             Neuronio(peso, vies) for (peso, vies) in zip(pesos, vieses)
         ]
